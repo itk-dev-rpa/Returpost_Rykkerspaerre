@@ -8,4 +8,7 @@ def get_constants(orchestrator_connection:OrchestratorConnection) -> dict:
     error_email = orchestrator_connection.get_constant("Error Email")
     constants["Error Email"] = error_email
 
+    sap_login = orchestrator_connection.get_credential("Mathias SAP")
+    constants['SAP Credentials'] = sap_login
+
     return constants

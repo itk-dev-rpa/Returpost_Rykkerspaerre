@@ -26,7 +26,7 @@ def main():
     for _ in range(max_retry_count):
         try:
             orchestrator_connection.log_trace("Resetting.")
-            reset.reset(orchestrator_connection)
+            reset.reset(orchestrator_connection, constants['SAP Credentials'])
 
             orchestrator_connection.log_trace("Running process.")
             process.process(orchestrator_connection)
@@ -44,10 +44,12 @@ def main():
             orchestrator_connection.log_error(f"Error caught during process. Number of errors caught: {error_count}. {error_type}: {error}\nTrace: {traceback.format_exc()}")
             error_screenshot.send_error_screenshot(constants['Error Email'], error, orchestrator_connection.process_name)
 
-    
+    orchestrator_connection.log_trace("Running cleanup before end.")
     reset.clean_up()
     reset.close_all()
     reset.kill_all()
+
+    orchestrator_connection.log_trace("Framework done.")
 
 
 def log_exception(orchestrator_connection:OrchestratorConnection) -> callable:

@@ -4,3 +4,4 @@
 # Framework requirements
 OpenOrchestratorConnection
 Pillow
+ITK-dev-shared-components
