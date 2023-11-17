@@ -15,3 +15,4 @@ def select_layout(session, layout):
     row_index = gridview_util.find_row_index_by_value(layout_table, "VARIANT", layout)
     layout_table.setCurrentCell(row_index, 'VARIANT')
     layout_table.clickCurrentCell()
+    
