@@ -21,7 +21,7 @@ def send_error_screenshot(to_adress:str | list[str], exception:Exception, proces
     with open("screenshot.png", "rb") as img_file:
         screenshot_data = img_file.read()
         screenshot_base64 = base64.b64encode(screenshot_data).decode('utf-8')
-    
+
     # Delete screenshot
     os.remove('screenshot.png')
 
@@ -44,10 +44,3 @@ def send_error_screenshot(to_adress:str | list[str], exception:Exception, proces
     with smtplib.SMTP("smtp.aarhuskommune.local", 25) as smtp:
         smtp.starttls()
         smtp.send_message(msg)
-
-
-if __name__ == '__main__':
-    try:
-        raise ValueError("Oh no!")
-    except Exception as e:
-        send_error_screenshot("ghbm@aarhus.dk", e, "Test proc")

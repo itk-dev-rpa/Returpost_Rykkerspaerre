@@ -1,4 +1,4 @@
-from ITK_dev_shared_components.SAP import gridview_util
+from itk_dev_shared_components.sap import gridview_util
 
 def handle_Q(session):
     case_table = session.findById('wnd[0]/usr/cntlGRID1/shellcont/shell')

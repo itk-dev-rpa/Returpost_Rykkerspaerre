@@ -1,10 +1,9 @@
 from datetime import date, timedelta
 import pyodbc
 
-from OpenOrchestratorConnection.orchestrator_connection import OrchestratorConnection
+from OpenOrchestrator.orchestrator_connection.connection import OrchestratorConnection
 
-from ITK_dev_shared_components.SAP import gridview_util
-from ITK_dev_shared_components.SAP import opret_kundekontakt
+from itk_dev_shared_components.sap import gridview_util, opret_kundekontakt
 
 def handle_7(orchestrator_connection:OrchestratorConnection, session, fmcacov_session):
     fmcacov_session.StartTransaction('FMCACOV')
@@ -17,13 +16,13 @@ def handle_7(orchestrator_connection:OrchestratorConnection, session, fmcacov_se
         i += 1
         if i > 3:
             break
-        
+
         orchestrator_connection.log_info(f"Rykkerspærre 7, begynder fp: {fp}")
 
         should_skip = not check_fp(fmcacov_session, fp)
         if should_skip:
             continue
-        
+
         row_indecies = gridview_util.find_all_row_indecies_by_value(case_table, "ZZ_PARTNER", fp)
 
         extend_all_rykkerspærrer_deadlines(session, row_indecies)
@@ -59,7 +58,7 @@ def extend_all_rykkerspærrer_deadlines(session, row_indecies):
         # Check rykkerspærre type
         if session.findById("wnd[0]/usr/subBDT_AREA:SAPLBUSS:0021/tabsBDT_TABSTRIP01/tabpBUSCR02_01/ssubGENSUB:SAPLBUSS:0029/ssubGENSUB:SAPLBUSS:7135/subA04P02:SAPLFMCA_PSOB_BDT2:0330/ctxtSPSOB_SCR_2110_H3-DUNN_REASON").text != '7':
             raise ValueError("Rykkerspæretype is not '7'")
-        
+
         # Edit date
         new_date = (date.today() + timedelta(days=90)).strftime("%d.%m.%Y")
         session.findById("wnd[0]/usr/btnPUSHB_CHANGE").press()
@@ -91,17 +90,17 @@ def check_fp(session, fp_number):
     if popup:
         popup.press()
         return False
-    
+
     # Read Digital Post status
     dp_status = session.findById('wnd[0]/usr/txtZDKD_DIGITAL_POST').text
     if dp_status not in ('Ukendt', 'Fritaget'):
         return False
-    
+
     cpr = session.findById('wnd[0]/usr/txtZDKD_BP_NUM').text
     cpr = cpr.replace('-', '')
     is_address_old = check_address_date(cpr)
     return is_address_old
-    
+
 
 def check_address_date(cpr:str):
     """Return true if the cpr has an aktuel_adresse that is more than 3 months old"""
@@ -109,10 +108,10 @@ def check_address_date(cpr:str):
     cursor = conn.execute(f"SELECT DatoFra FROM DWH.Mart.AdresseAktuel WHERE CPR = '{cpr}'")
     if cursor.rowcount == 0:
         return False
-    
+
     # Check if date is older than 3 months
     date_from = cursor.fetchone()[0]
     if date_from is not None and date_from < (date.today() - timedelta(days=90)):
         return True
-    
+
     return False

@@ -1,4 +1,4 @@
-from ITK_dev_shared_components.SAP import gridview_util
+from itk_dev_shared_components.sap import gridview_util
 
 def open_afklaringsliste(session):
     session.findById("wnd[0]/tbar[0]/okcd").text = "emmacl"

@@ -1,5 +1,5 @@
-from OpenOrchestratorConnection.orchestrator_connection import OrchestratorConnection
-from ITK_dev_shared_components.SAP import multi_session
+from OpenOrchestrator.orchestrator_connection.connection import OrchestratorConnection
+from itk_dev_shared_components.sap import multi_session
 
 from SAP import handle_7, handle_q, startup
 

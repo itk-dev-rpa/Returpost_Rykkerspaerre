@@ -1,13 +1,13 @@
 import traceback
 import sys
 
-from OpenOrchestratorConnection.orchestrator_connection import OrchestratorConnection
+from OpenOrchestrator.orchestrator_connection.connection import OrchestratorConnection
 
-import initialize
-import get_constants
-import reset
-import error_screenshot
-import process
+from src import initialize
+from src import get_constants
+from src import reset
+from src import error_screenshot
+from src import process
 
 def main():
     orchestrator_connection = OrchestratorConnection.create_connection_from_args()
@@ -15,7 +15,7 @@ def main():
 
     orchestrator_connection.log_trace("Process started.")
 
-    orchestrator_connection.log_trace("Initialzing.")
+    orchestrator_connection.log_trace("Initializing.")
     initialize.initialize(orchestrator_connection)
 
     orchestrator_connection.log_trace("Getting constants.")
@@ -45,9 +45,9 @@ def main():
             error_screenshot.send_error_screenshot(constants['Error Email'], error, orchestrator_connection.process_name)
 
     orchestrator_connection.log_trace("Running cleanup before end.")
-    reset.clean_up()
-    reset.close_all()
-    reset.kill_all()
+    reset.clean_up(orchestrator_connection)
+    reset.close_all(orchestrator_connection)
+    reset.kill_all(orchestrator_connection)
 
     orchestrator_connection.log_trace("Framework done.")
 
@@ -60,7 +60,3 @@ def log_exception(orchestrator_connection:OrchestratorConnection) -> callable:
 
 class BusinessError(Exception):
     pass
-
-
-if __name__ == '__main__':
-    main()
