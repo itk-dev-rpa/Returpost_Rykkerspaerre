@@ -1,13 +1,13 @@
+"""This module handles all Rykkerspærre of type 'Q'."""
+
 from itk_dev_shared_components.sap import gridview_util
 
-def handle_Q(session):
+def handle_q(session):
+    """Handle all Rykkerspærre of type 'Q'."""
     case_table = session.findById('wnd[0]/usr/cntlGRID1/shellcont/shell')
     gridview_util.scroll_entire_table(case_table, True)
 
     for row in range(case_table.RowCount):
-        if row > 3:
-            break
-        
         # Open case
         case_table.doubleClick(row, 'ZZ_IDNUMBER')
 

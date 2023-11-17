@@ -1,3 +1,5 @@
+"""This module handles all Rykkerspærre of type '7'."""
+
 from datetime import date, timedelta
 import pyodbc
 
@@ -6,46 +8,45 @@ from OpenOrchestrator.orchestrator_connection.connection import OrchestratorConn
 from itk_dev_shared_components.sap import gridview_util, opret_kundekontakt
 
 def handle_7(orchestrator_connection:OrchestratorConnection, session, fmcacov_session):
+    """Go through the list of type '7' rykkerspærre and handle them."""
     fmcacov_session.StartTransaction('FMCACOV')
 
     case_table = session.findById('wnd[0]/usr/cntlGRID1/shellcont/shell')
     gridview_util.scroll_entire_table(case_table, True)
-    FPs = get_FPs(case_table)
-    i = 0
-    for fp in FPs:
-        i += 1
-        if i > 3:
-            break
+    fp_list = get_fp_list(case_table)
 
+    for fp in fp_list:
         orchestrator_connection.log_info(f"Rykkerspærre 7, begynder fp: {fp}")
 
         should_skip = not check_fp(fmcacov_session, fp)
         if should_skip:
             continue
 
-        row_indecies = gridview_util.find_all_row_indecies_by_value(case_table, "ZZ_PARTNER", fp)
+        row_indices = gridview_util.find_all_row_indices_by_value(case_table, "ZZ_PARTNER", fp)
 
-        extend_all_rykkerspærrer_deadlines(session, row_indecies)
+        extend_all_rykkerspaerrer_deadlines(session, row_indices)
 
-        aftaler = collect_aftaler(session, row_indecies)
+        aftaler = collect_aftaler(session, row_indices)
 
         orchestrator_connection.log_info(f"Opretter kundekontakt på: FP: {fp}; Aftaler: {aftaler}")
 
         opret_kundekontakt.opret_kundekontakter(fmcacov_session, fp, aftaler, 'Orientering', 'Debitor har ikke fået digital post eller ny adresse. Henstand givet pga. manglende adresse. Der følges op på sagen om 3 måneder.')
 
 
-def collect_aftaler(session, row_indecies):
+def collect_aftaler(session, row_indices):
+    """Collect all aftale ids in the given rows."""
     case_table = session.findById('wnd[0]/usr/cntlGRID1/shellcont/shell')
     aftaler = []
-    for row in row_indecies:
+    for row in row_indices:
         aftale = case_table.getCellValue(row, 'ZZPSOBKEY')
         aftaler.append(aftale)
     return aftaler
 
 
-def extend_all_rykkerspærrer_deadlines(session, row_indecies):
+def extend_all_rykkerspaerrer_deadlines(session, row_indices):
+    """Extend all deadlines on the rykkerspærrer on the given rows, assuming they have been handled."""
     case_table = session.findById('wnd[0]/usr/cntlGRID1/shellcont/shell')
-    for row in row_indecies:
+    for row in row_indices:
         case_table.doubleClick(row, 'ZZ_IDNUMBER')
 
         # Open aftaleindhold
@@ -70,12 +71,13 @@ def extend_all_rykkerspærrer_deadlines(session, row_indecies):
         session.findById("wnd[0]/tbar[0]/btn[11]").press()
 
 
-def get_FPs(case_table):
-    FPs = set()
+def get_fp_list(case_table):
+    """Get all unique fp-numbers from the table."""
+    fp_set = set()
     for row in range(case_table.RowCount):
         fp = case_table.getCellValue(row, 'ZZ_PARTNER')
-        FPs.add(fp)
-    return tuple(FPs)
+        fp_set.add(fp)
+    return tuple(fp_set)
 
 
 def check_fp(session, fp_number):
