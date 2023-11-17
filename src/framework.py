@@ -25,7 +25,6 @@ def main():
     max_retry_count = 3
     for _ in range(max_retry_count):
         try:
-            orchestrator_connection.log_trace("Resetting.")
             reset.reset(orchestrator_connection, constants['SAP Credentials'])
 
             orchestrator_connection.log_trace("Running process.")
