@@ -3,7 +3,7 @@
 from OpenOrchestrator.orchestrator_connection.connection import OrchestratorConnection
 from itk_dev_shared_components.sap import multi_session
 
-from .sap import handle_7, handle_q, startup
+from .sap import handle_7, handle_q, common
 
 def process(orchestrator_connection: OrchestratorConnection) -> None:
     """Do the primary process of the robot."""
@@ -14,14 +14,14 @@ def process(orchestrator_connection: OrchestratorConnection) -> None:
     session2 = sessions[1]
 
     orchestrator_connection.log_trace("Opening afklaringsliste.")
-    startup.open_afklaringsliste(session1)
+    common.open_afklaringsliste(session1)
 
     orchestrator_connection.log_trace("Starting Q.")
-    startup.select_layout(session1, '/RPA_RS_Q')
+    common.select_layout(session1, '/RPA_RS_Q')
     handle_q.handle_q(session1)
     orchestrator_connection.log_trace("Q done.")
 
     orchestrator_connection.log_trace("Starting 7.")
-    startup.select_layout(session1, '/RPA_RS_7')
+    common.select_layout(session1, '/RPA_RS_7')
     handle_7.handle_7(orchestrator_connection, session1, session2)
     orchestrator_connection.log_trace("7 done.")
