@@ -1,3 +1,5 @@
+"""This module is the primary module of the robot framework. It collects the functionality of the rest of the framework."""
+
 import traceback
 import sys
 
@@ -10,15 +12,14 @@ from src import error_screenshot
 from src import process
 
 def main():
+    """The entry point for the framework. Should be called as the first thing when running the robot."""
     orchestrator_connection = OrchestratorConnection.create_connection_from_args()
     sys.excepthook = log_exception(orchestrator_connection)
 
     orchestrator_connection.log_trace("Process started.")
 
-    orchestrator_connection.log_trace("Initializing.")
     initialize.initialize(orchestrator_connection)
 
-    orchestrator_connection.log_trace("Getting constants.")
     constants = get_constants.get_constants(orchestrator_connection)
 
     error_count = 0
@@ -26,17 +27,17 @@ def main():
     for _ in range(max_retry_count):
         try:
             reset.reset(orchestrator_connection, constants['SAP Credentials'])
-
-            orchestrator_connection.log_trace("Running process.")
             process.process(orchestrator_connection)
-
             break
 
+        # If any business rules are broken the robot should stop entirely.
         except BusinessError as error:
             orchestrator_connection.log_error(f"BusinessError: {error}\nTrace: {traceback.format_exc()}")
             error_screenshot.send_error_screenshot(constants['Error Email'], error, orchestrator_connection.process_name)
             break
 
+        # We actually want to catch all exceptions possible here.
+        # pylint: disable-next = broad-exception-caught
         except Exception as error:
             error_count += 1
             error_type = type(error).__name__
@@ -52,10 +53,18 @@ def main():
 
 
 def log_exception(orchestrator_connection:OrchestratorConnection) -> callable:
-    def inner(type, value, traceback):
-        orchestrator_connection.log_error(f"Uncaught Exception:\nType: {type}\nValue: {value}\nTrace: {traceback}")
+    """Creates a function to be used as an exception hook that logs any uncaught exception in OpenOrchestrator.
+
+    Args:
+        orchestrator_connection: The connection to OpenOrchestrator.
+
+    Returns:
+        callable: A function that can be assigned to sys.excepthook.
+    """
+    def inner(exception_type, value, traceback_string):
+        orchestrator_connection.log_error(f"Uncaught Exception:\nType: {exception_type}\nValue: {value}\nTrace: {traceback_string}")
     return inner
 
 
 class BusinessError(Exception):
-    pass
+    """An empty exception used to identify errors caused by breaking business rules"""

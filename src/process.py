@@ -1,10 +1,14 @@
+"""This module contains the main process of the robot."""
+
 from OpenOrchestrator.orchestrator_connection.connection import OrchestratorConnection
 from itk_dev_shared_components.sap import multi_session
 
-from SAP import handle_7, handle_q, startup
+from .sap import handle_7, handle_q, startup
 
-def process(orchestrator_connection:OrchestratorConnection) -> None:
+def process(orchestrator_connection: OrchestratorConnection) -> None:
     """Do the primary process of the robot."""
+    orchestrator_connection.log_trace("Running process.")
+
     sessions = multi_session.spawn_sessions(2)
     session1 = sessions[0]
     session2 = sessions[1]
