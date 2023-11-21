@@ -1,5 +1,7 @@
-from OpenOrchestratorConnection.orchestrator_connection import OrchestratorConnection
+"""This module defines any initial processes to run when the robot starts."""
 
-def initialize(orchestrator_connection:OrchestratorConnection) -> None:
+from OpenOrchestrator.orchestrator_connection.connection import OrchestratorConnection
+
+def initialize(orchestrator_connection: OrchestratorConnection) -> None:
     """Do all custom startup initializations of the robot."""
-    pass
+    orchestrator_connection.log_trace("Initializing.")

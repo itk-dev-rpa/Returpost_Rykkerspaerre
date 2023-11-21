@@ -1,3 +1,5 @@
+"""This module has functionality to send error screenshots via smtp."""
+
 import smtplib
 from email.message import EmailMessage
 import os
@@ -6,10 +8,18 @@ import traceback
 
 from PIL import ImageGrab
 
-def send_error_screenshot(to_adress:str | list[str], exception:Exception, process_name:str):
+def send_error_screenshot(to_address:str | list[str], exception:Exception, process_name:str):
+    """Creates and send an email containing the stacktrace of the given exception and a screenshot of the
+    current screen. 
+
+    Args:
+        to_address: The address or addresses to send the email to.
+        exception: The exception to base the email on.
+        process_name: The name of the process responsible for the exception.
+    """
     # Create message
     msg = EmailMessage()
-    msg['to'] = to_adress
+    msg['to'] = to_address
     msg['from'] = 'robot@friend.dk'
     msg['subject'] = f"Error screenshot: {process_name}"
 
@@ -21,7 +31,7 @@ def send_error_screenshot(to_adress:str | list[str], exception:Exception, proces
     with open("screenshot.png", "rb") as img_file:
         screenshot_data = img_file.read()
         screenshot_base64 = base64.b64encode(screenshot_data).decode('utf-8')
-    
+
     # Delete screenshot
     os.remove('screenshot.png')
 
@@ -44,10 +54,3 @@ def send_error_screenshot(to_adress:str | list[str], exception:Exception, proces
     with smtplib.SMTP("smtp.aarhuskommune.local", 25) as smtp:
         smtp.starttls()
         smtp.send_message(msg)
-
-
-if __name__ == '__main__':
-    try:
-        raise ValueError("Oh no!")
-    except Exception as e:
-        send_error_screenshot("ghbm@aarhus.dk", e, "Test proc")
