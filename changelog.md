@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Dependencies typo in pyproject.toml
 
+### Added
+
+- Changelog!
+
 ## [1.0.0] - 2023-11-22
 
 - Initial release
