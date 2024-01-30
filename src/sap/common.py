@@ -2,6 +2,7 @@
 
 from itk_dev_shared_components.sap import gridview_util
 
+
 def open_afklaringsliste(session):
     """Open the afklaringsliste in emmacl and apply the correct filters."""
     session.findById("wnd[0]/tbar[0]/okcd").text = "emmacl"
@@ -21,10 +22,13 @@ def select_layout(session, layout: str):
     layout_table.setCurrentCell(row_index, 'VARIANT')
     layout_table.clickCurrentCell()
 
+
 def open_aftaleindhold(session, case_table, row_index: int) -> None:
     """Opens the aftaleindhold of the case on the given row of the given table."""
-    # Double click row
-    case_table.doubleClick(row_index, 'ZZ_IDNUMBER')
+    # Select row and click 'Ændr'
+    case_table.firstVisibleRow = row_index
+    case_table.selectedRows = row_index
+    session.findById("wnd[0]/tbar[1]/btn[14]").press()
 
     # Open aftaleindhold
     session.findById("wnd[0]/usr/tabsTABSTRIP/tabpBUTOBJ").select()
