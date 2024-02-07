@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.2] - 2024-02-07
+
+### Fixed
+
+- Skip cases with no rykkerspærre 7 instead of throwing an error
+
 ## [1.0.1] - 2023-11-23
 
 ### Fixed
