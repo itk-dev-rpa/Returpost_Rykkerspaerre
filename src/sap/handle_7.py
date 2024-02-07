@@ -52,8 +52,8 @@ def extend_all_rykkerspaerrer_deadlines(session, row_indices):
 
         # If there is no rykkerspærre 7, go back and continue with next row
         if session.findById("wnd[0]/usr/subBDT_AREA:SAPLBUSS:0021/tabsBDT_TABSTRIP01/tabpBUSCR02_01/ssubGENSUB:SAPLBUSS:0029/ssubGENSUB:SAPLBUSS:7135/subA04P02:SAPLFMCA_PSOB_BDT2:0330/ctxtSPSOB_SCR_2110_H3-DUNN_REASON").text != '7':
-            session.findById("wnd[0]/tbar[0]/btn[11]").press()
-            session.findById("wnd[0]/tbar[0]/btn[11]").press()
+            session.findById("wnd[0]/tbar[0]/btn[3]").press()
+            session.findById("wnd[0]/tbar[0]/btn[3]").press()
             session.findById("wnd[1]/usr/btnBUTTON_2").press()
             continue
 
