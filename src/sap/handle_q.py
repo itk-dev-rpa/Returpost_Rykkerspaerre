@@ -4,6 +4,7 @@ from itk_dev_shared_components.sap import gridview_util
 
 from . import common
 
+
 def handle_q(session):
     """Handle all Rykkerspærre of type 'Q'."""
     case_table = session.findById('wnd[0]/usr/cntlGRID1/shellcont/shell')
