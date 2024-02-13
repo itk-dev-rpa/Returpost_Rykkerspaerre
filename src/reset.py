@@ -5,7 +5,8 @@ from OpenOrchestrator.database.constants import Credential
 
 from itk_dev_shared_components.sap import sap_login
 
-def reset(orchestrator_connection:OrchestratorConnection, sap_credentials: Credential) -> None:
+
+def reset(orchestrator_connection: OrchestratorConnection, sap_credentials: Credential) -> None:
     """Clean up, close/kill all programs and start them again. """
     orchestrator_connection.log_trace("Resetting.")
     clean_up(orchestrator_connection)
