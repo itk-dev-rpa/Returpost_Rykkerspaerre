@@ -5,6 +5,7 @@ from itk_dev_shared_components.sap import multi_session
 
 from .sap import handle_7, handle_q, common
 
+
 def process(orchestrator_connection: OrchestratorConnection) -> None:
     """Do the primary process of the robot."""
     orchestrator_connection.log_trace("Running process.")
