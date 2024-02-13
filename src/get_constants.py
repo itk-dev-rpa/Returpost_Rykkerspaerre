@@ -2,6 +2,7 @@
 
 from OpenOrchestrator.orchestrator_connection.connection import OrchestratorConnection
 
+
 def get_constants(orchestrator_connection: OrchestratorConnection) -> dict:
     """Get all constants used by the robot."""
     orchestrator_connection.log_trace("Getting constants.")

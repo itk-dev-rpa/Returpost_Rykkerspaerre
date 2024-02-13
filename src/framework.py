@@ -11,6 +11,7 @@ from src import reset
 from src import error_screenshot
 from src import process
 
+
 def main():
     """The entry point for the framework. Should be called as the first thing when running the robot."""
     orchestrator_connection = OrchestratorConnection.create_connection_from_args()
@@ -52,7 +53,7 @@ def main():
     orchestrator_connection.log_trace("Framework done.")
 
 
-def log_exception(orchestrator_connection:OrchestratorConnection) -> callable:
+def log_exception(orchestrator_connection: OrchestratorConnection) -> callable:
     """Creates a function to be used as an exception hook that logs any uncaught exception in OpenOrchestrator.
 
     Args:

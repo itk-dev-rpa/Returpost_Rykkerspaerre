@@ -8,7 +8,8 @@ from itk_dev_shared_components.sap import gridview_util, opret_kundekontakt
 
 from . import common
 
-def handle_7(orchestrator_connection:OrchestratorConnection, session, fmcacov_session):
+
+def handle_7(orchestrator_connection: OrchestratorConnection, session, fmcacov_session):
     """Go through the list of type '7' rykkerspærre and handle them."""
     fmcacov_session.StartTransaction('FMCACOV')
 
@@ -66,11 +67,22 @@ def extend_all_rykkerspaerrer_deadlines(session, row_indices):
 
 
 def get_fp_list(case_table):
-    """Get all unique fp-numbers from the table."""
+    """Get all unique fp-numbers from the table.
+    Exclude ones that has a value in the bilagsnummer column.
+    """
     fp_set = set()
     for row in range(case_table.RowCount):
         fp = case_table.getCellValue(row, 'ZZ_PARTNER')
         fp_set.add(fp)
+
+    # Remove any that has a value in the bilagsnummer column
+    for row in range(case_table.RowCount):
+        bilag = case_table.getCellValue(row, 'ZZOPBEL')
+        if bilag:
+            fp = case_table.getCellValue(row, 'ZZ_PARTNER')
+            if fp in fp_set:
+                fp_set.remove(fp)
+
     return tuple(fp_set)
 
 
@@ -98,7 +110,7 @@ def check_fp(session, fp_number):
     return is_address_old
 
 
-def check_address_date(cpr:str):
+def check_address_date(cpr: str):
     """Return true if the cpr has an aktuel_adresse that is more than 3 months old"""
     conn = pyodbc.connect("Driver={ODBC Driver 17 for SQL Server};Server=FaellesSQL;Trusted_Connection=yes;")
     cursor = conn.execute(f"SELECT DatoFra FROM DWH.Mart.AdresseAktuel WHERE CPR = '{cpr}'")
