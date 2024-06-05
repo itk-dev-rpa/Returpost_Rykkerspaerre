@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.4] - 2024-06-05
+
+### Fixed
+
+- SAP User changed from dev account
+
 ## [1.0.3] - 2024-02-13
 
 ### Fixed
