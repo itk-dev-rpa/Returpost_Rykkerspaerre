@@ -19,7 +19,7 @@ def process(orchestrator_connection: OrchestratorConnection) -> None:
 
     orchestrator_connection.log_trace("Starting Q.")
     common.select_layout(session1, '/RPA_RS_Q')
-    handle_q.handle_q(session1)
+    handle_q.handle_q(orchestrator_connection, session1)
     orchestrator_connection.log_trace("Q done.")
 
     orchestrator_connection.log_trace("Starting 7.")
