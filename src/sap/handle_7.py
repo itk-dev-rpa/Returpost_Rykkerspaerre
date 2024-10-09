@@ -3,9 +3,10 @@
 from datetime import date, timedelta
 
 import pyodbc
-from OpenOrchestrator.orchestrator_connection.connection import OrchestratorConnection
+from OpenOrchestrator.orchestrator_connection.connection import OrchestratorConnection, QueueStatus
 from itk_dev_shared_components.sap import gridview_util, opret_kundekontakt
 
+import config
 from . import common
 
 
@@ -20,6 +21,8 @@ def handle_7(orchestrator_connection: OrchestratorConnection, session, fmcacov_s
     for fp in fp_list:
         orchestrator_connection.log_info(f"Rykkerspærre 7, begynder fp: {fp}")
 
+        queue_element = orchestrator_connection.create_queue_element(config.QUEUE_NAME, 'Rykkerspærre 7')
+
         should_skip = not check_fp(fmcacov_session, fp)
         if should_skip:
             continue
@@ -33,6 +36,8 @@ def handle_7(orchestrator_connection: OrchestratorConnection, session, fmcacov_s
         orchestrator_connection.log_info(f"Opretter kundekontakt på: FP: {fp}; Aftaler: {aftaler}")
 
         opret_kundekontakt.opret_kundekontakter(fmcacov_session, fp, aftaler, 'Orientering', 'Debitor har ikke fået digital post eller ny adresse. Henstand givet pga. manglende adresse. Der følges op på sagen om 3 måneder.')
+
+        orchestrator_connection.set_queue_element_status(queue_element.id, QueueStatus.DONE)
 
 
 def collect_aftaler(session, row_indices):

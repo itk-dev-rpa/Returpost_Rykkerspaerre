@@ -11,7 +11,7 @@ from PIL import ImageGrab
 
 def send_error_screenshot(to_address: str | list[str], exception: Exception, process_name: str):
     """Creates and send an email containing the stacktrace of the given exception and a screenshot of the
-    current screen. 
+    current screen.
 
     Args:
         to_address: The address or addresses to send the email to.
