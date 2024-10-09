@@ -1,3 +1,5 @@
+"""This module contains configuration constants used across the framework"""
+
 # Queue specific configs
 # ----------------------
 

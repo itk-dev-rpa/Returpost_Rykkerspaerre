@@ -3,8 +3,8 @@
 from itk_dev_shared_components.sap import gridview_util
 from OpenOrchestrator.orchestrator_connection.connection import OrchestratorConnection, QueueStatus
 
-from . import common
 import config
+from . import common
 
 
 def handle_q(orchestrator_connection: OrchestratorConnection, session):
@@ -14,7 +14,7 @@ def handle_q(orchestrator_connection: OrchestratorConnection, session):
 
     for row in range(case_table.RowCount):
         common.open_aftaleindhold(session, case_table, row)
-        
+
         queue_element = orchestrator_connection.create_queue_element(config.QUEUE_NAME, 'Rykkerspærre Q')
 
         # Press edit, delete 'Q' and save

@@ -6,8 +6,8 @@ import pyodbc
 from OpenOrchestrator.orchestrator_connection.connection import OrchestratorConnection, QueueStatus
 from itk_dev_shared_components.sap import gridview_util, opret_kundekontakt
 
-from . import common
 import config
+from . import common
 
 
 def handle_7(orchestrator_connection: OrchestratorConnection, session, fmcacov_session):
