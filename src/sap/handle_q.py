@@ -2,6 +2,7 @@
 
 from itk_dev_shared_components.sap import gridview_util
 from OpenOrchestrator.orchestrator_connection.connection import OrchestratorConnection, QueueStatus
+import itk_dev_event_log
 
 import config
 from . import common
@@ -30,4 +31,5 @@ def handle_q(orchestrator_connection: OrchestratorConnection, session):
         session.findById("wnd[0]/usr/cmbEMMAD_CASEHDR-STATUS").value = "Afsluttet"
         session.findById("wnd[0]/tbar[0]/btn[11]").press()
 
+        itk_dev_event_log.emit(orchestrator_connection.process_name, "Q handled")
         orchestrator_connection.set_queue_element_status(queue_element.id, QueueStatus.DONE)
