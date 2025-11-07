@@ -38,7 +38,7 @@ def handle_7(orchestrator_connection: OrchestratorConnection, session, fmcacov_s
 
         opret_kundekontakt.opret_kundekontakter(fmcacov_session, fp, aftaler, 'Orientering', 'Debitor har ikke fået digital post eller ny adresse. Henstand givet pga. manglende adresse. Der følges op på sagen om 3 måneder.')
 
-        itk_dev_event_log.emit(orchestrator_connection.process_name, "7 handled")
+        itk_dev_event_log.emit(orchestrator_connection.process_name, "Rykkerspærre type 7 handled")
         orchestrator_connection.set_queue_element_status(queue_element.id, QueueStatus.DONE)
 
 

@@ -31,5 +31,5 @@ def handle_q(orchestrator_connection: OrchestratorConnection, session):
         session.findById("wnd[0]/usr/cmbEMMAD_CASEHDR-STATUS").value = "Afsluttet"
         session.findById("wnd[0]/tbar[0]/btn[11]").press()
 
-        itk_dev_event_log.emit(orchestrator_connection.process_name, "Q handled")
+        itk_dev_event_log.emit(orchestrator_connection.process_name, "Rykkerspærre type Q handled")
         orchestrator_connection.set_queue_element_status(queue_element.id, QueueStatus.DONE)
