@@ -2,6 +2,7 @@
 
 from OpenOrchestrator.orchestrator_connection.connection import OrchestratorConnection
 from itk_dev_shared_components.sap import multi_session
+import itk_dev_event_log
 
 from .sap import handle_7, handle_q, common
 
@@ -9,6 +10,8 @@ from .sap import handle_7, handle_q, common
 def process(orchestrator_connection: OrchestratorConnection) -> None:
     """Do the primary process of the robot."""
     orchestrator_connection.log_trace("Running process.")
+    event_log = orchestrator_connection.get_constant("Event Log")
+    itk_dev_event_log.setup_logging(event_log.value)
 
     sessions = multi_session.spawn_sessions(2)
     session1 = sessions[0]

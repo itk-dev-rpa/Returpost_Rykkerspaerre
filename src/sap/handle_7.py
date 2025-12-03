@@ -5,6 +5,7 @@ from datetime import date, timedelta
 import pyodbc
 from OpenOrchestrator.orchestrator_connection.connection import OrchestratorConnection, QueueStatus
 from itk_dev_shared_components.sap import gridview_util, opret_kundekontakt
+import itk_dev_event_log
 
 import config
 from . import common
@@ -37,6 +38,7 @@ def handle_7(orchestrator_connection: OrchestratorConnection, session, fmcacov_s
 
         opret_kundekontakt.opret_kundekontakter(fmcacov_session, fp, aftaler, 'Orientering', 'Debitor har ikke fået digital post eller ny adresse. Henstand givet pga. manglende adresse. Der følges op på sagen om 3 måneder.')
 
+        itk_dev_event_log.emit(orchestrator_connection.process_name, "Rykkerspærre type 7 handled")
         orchestrator_connection.set_queue_element_status(queue_element.id, QueueStatus.DONE)
 
 
